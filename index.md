@@ -29,11 +29,11 @@ During development, I encountered the following major challenges:
 
 1. **Overstressing Myself**  
    Description: I overloaded myself with courses this academic term, so the weight I held from this course's workload was intense.  
-   Why it was a problem: [e.g., Caused bugs, performance issues, or team misalignment]
+   Why it was a problem: My quality of work would naturally take a dip with more features being worked on simultaneously. Considering I had hefty workloads for my other courses as well, the quality would be acceptable and pretty good for the programming aspect of  the project, but otherwise I wish I could've added more quality with less of a headache.
 
 2. **Blueprint Functionality Occasionally Disappearing Upon Merging**  
    Description: While bugs were usually fixed, some features would occasionally disappear after merging in Github Desktop.
-   Why it was a problem: 
+   Why it was a problem: Significant time was usually allocated to complete the features that usually go missing, and the time that we have to waste to put the features back in game, often could have been allocated elsewhere and that was demoralizing. 
 
    I overcame these challenges by giving myself breaks to just relax, and by ensuring I had a social life to energize me. I would also take a half an hour to deviate to a technical topic I was more interested in when programming started to get stale or discouraging.
 ---
@@ -49,7 +49,8 @@ During development, I encountered the following major challenges:
   helped me work between Blueprint and C++ with more ease and confidence.
   
 - **Relevant Code (C++):**
-  In SkateShotCharacter.h
+  # In SkateShotCharacter.h
+  
   //// Film Count
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default")
   int32 FilmCount;
@@ -57,7 +58,8 @@ During development, I encountered the following major challenges:
   UFUNCTION(BlueprintCallable, Category = "UI")
   void SetGameplayInterface(UGameplayInterface* InGameplayInterface);
 
-  In SkateShotCharacter.cpp
+  # In SkateShotCharacter.cpp
+  
   void ASkateShotCharacter::TakePhoto() {
     if (isFirstPerson && FilmCount > 0) {
       UGameplayStatics::PlaySound2D(this, TookPictureSFX);
@@ -70,7 +72,8 @@ During development, I encountered the following major challenges:
     }
   }
 
-  In UGameplayInterface.cpp 
+  # In UGameplayInterface.cpp 
+  
   void UGameplayInterface::UpdateFilmCount(int32 NewCount)
   {
       if (FilmCountText)
@@ -87,7 +90,8 @@ During development, I encountered the following major challenges:
   The approach I settled on after researching was to use a Game Instance to hold the data in general. What I came up with is shown below.
   
 - **Relevant Code (C++):**
-  In SkateShotInstance.h
+  # In SkateShotInstance.h
+
   #pragma once
 
   #include "CoreMinimal.h"
@@ -104,7 +108,8 @@ During development, I encountered the following major challenges:
       FString LastReward;
   };
 
-  In FinishLine.cpp
+  # In FinishLine.cpp
+  
   void AFinishLine::OnPhotoTakenInFinishArea(ASkateShotCharacter* PlayerCharacter) {
     if (bPlayerInFinishArea && !bFinishTriggered) {
         bFinishTriggered = true;
@@ -141,7 +146,7 @@ During development, I encountered the following major challenges:
   Turns out some code was removed during the merge and putting it back solved the issue. This code is show below.
   
 - **Relevant Code (C++):**
-  In SkateShotCharacter.cpp
+  # In SkateShotCharacter.cpp
   void ASkateShotCharacter::FreezeVisibleActors(bool bShouldFreeze)
   {
     UWorld* World = GetWorld();
@@ -152,7 +157,6 @@ During development, I encountered the following major challenges:
     for (TActorIterator<AActor> It(World); It; ++It)
     {
       AActor* Actor = *It;
-
       if (Actor->ActorHasTag("Freezable") && Actor->WasRecentlyRendered(0.1f))
       {
         IFreezableInterface* FreezeTarget = Cast<IFreezableInterface>(Actor);
@@ -177,5 +181,5 @@ During development, I encountered the following major challenges:
   again, I would allow myself to work at a less tense and more comfortable, albeit professional, pace.
 
 ## Version Control:
-For this project, my team ended up going with Git and Git LFS. This was namely do to the Perforce server request through WPI giving out errors to our team at the time.
+For this project, my team ended up going with Git and Git LFS. This was namely due to the Perforce server request through WPI giving out errors to our team at the time.
 Reflecting back, it's had its ups and downs. I'll detail the pros of the system first. The GUI for Github (Github Desktop in this case) made all the basic functions of source control easy to perform. Not to mention, merge conflicts weren't terribly bad to resolve either, although I recognize that this varies between others. I also already had Git LFS on my laptop, so the rest wasn't terrible to set up within our repository, albeit it still took some time to properly figure out how to implement LFS into the repo, which I guess is a con. The good side of using Git, was characterized mainly through using the GUI. Now for the cons! After merges there was the occasional oddity of missing functionality to our blueprints in some cases, which was irratating to resolve. Also, binary files would frequently fail to merge, but resolving those issues weren't terrible. That's the general concensus I have on my use of version control for this project. Overall, Git LFS is not a bad option, especially after set up is set and done.  
